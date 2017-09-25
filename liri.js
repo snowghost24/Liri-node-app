@@ -18,6 +18,32 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
 }
 
 
+
+// Pulls songs from spotify
+var Spotify = require('node-spotify-api');
+var spotify = new Spotify(keys.spotify);
+ function runSpotify(){
+   var song = process.argv.slice(3).join(" ");
+   spotify.search({ type: 'track', query: song , limit: 1})
+      .then(function (response) {
+         // finding the album
+         console.log('The album: \"' +response.tracks.items[0].album.name+'\"');
+         // finding the artist
+       var artists = response.tracks.items[0].artists ;
+       artists.forEach(function(element) {
+          console.log(element.name);
+       }, this);
+       // finding the links
+       console.log(response.tracks.items[0].album.external_urls.spotify)
+      })
+      .catch(function (err) {
+         // console.log(err);
+      });
+ }
+
+ 
+
+
 var command = process.argv[2];
 switch (command) {
    case 'my-tweets':
